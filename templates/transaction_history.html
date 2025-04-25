@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>송금 내역</title>
+</head>
+<body>
+    <h1>송금 내역</h1>
+    <table>
+        <tr>
+            <th>송금일</th>
+            <th>보낸 사람</th>
+            <th>받은 사람</th>
+            <th>금액</th>
+        </tr>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.timestamp }}</td>
+                <td>{{ transaction.sender.username }}</td>
+                <td>{{ transaction.receiver.username }}</td>
+                <td>{{ transaction.amount }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

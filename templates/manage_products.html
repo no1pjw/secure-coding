@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>내 상품 관리</title>
+    <link rel="stylesheet" href="{{ stylesheet }}">
+</head>
+<body>
+    <div class="container">
+        <h1>내가 등록한 상품</h1>
+        <ul>
+            {% for product in products %}
+                <li>{{ product.title }} - {{ product.price }}원</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('home') }}">홈으로</a>
+    </div>
+</body>
+</html>

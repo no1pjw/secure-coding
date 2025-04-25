@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 상세</title>
+    <link rel="stylesheet" href="{{ stylesheet }}">
+    <script>
+        function confirmPurchase(productId) {
+            if (confirm("정말로 이 상품을 구매하시겠습니까?")) {
+                // 사용자가 '예'를 클릭하면 POST 요청을 보내도록 함
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/buy_product/' + productId;
+
+                // 폼을 서버에 제출
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ product.title }}</h1>
+        <p>{{ product.description }}</p>
+        <p>가격: {{ product.price }}원</p>
+
+        <!-- 상품 구매 버튼, 클릭 시 confirmPurchase 함수 호출 -->
+        <button type="button" onclick="confirmPurchase({{ product.id }})">구매하기</button>
+
+        <form method="GET" action="{{ url_for('report_product', product_id=product.id) }}">
+            <input type="hidden" name="type" value="product">
+            <input type="hidden" name="id" value="{{ product.id }}">
+            <button type="submit">신고하기</button>
+        </form>
+        
+        <a href="{{ url_for('products') }}">← 상품 목록</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>실시간 전체 채팅</title>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }
+    #msg { width: 80%; padding: 5px; }
+    button { padding: 6px 10px; }
+  </style>
+</head>
+<body>
+  <h2>실시간 전체 채팅</h2>
+  <div id="chat"></div>
+  <input type="text" id="msg" placeholder="메시지를 입력하세요..." />
+  <button onclick="sendMessage()">보내기</button>
+
+  <script>
+    const socket = io();
+    const room = 'global';
+
+    // 전체 채팅방에 참여
+    socket.emit('join', { room: room });
+
+    // 메시지가 오면 채팅 화면에 추가
+    socket.on('message', function(data) {
+      const chatBox = document.getElementById('chat');
+      const newMsg = document.createElement('p');
+      newMsg.innerHTML = `<strong>${data.user}</strong>: ${data.text}`;
+      chatBox.appendChild(newMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    // 메시지 보내기
+    function sendMessage() {
+      const msgInput = document.getElementById('msg');
+      const message = msgInput.value;
+      if (message.trim() !== '') {
+        socket.emit('message', { room: room, user: '{{ current_user.username if current_user.is_authenticated else "익명" }}', text: message });
+        msgInput.value = '';
+      }
+    }
+  </script>
+</body>
+</html>

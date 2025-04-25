@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>유저 관리</title>
+</head>
+<body>
+    <h1>유저 목록</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>상태</th>
+                <th>상태 변경</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        {% if user.is_dormant %}
+                            휴면
+                        {% else %}
+                            활성
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('toggle_user_status', user_id=user.id) }}">
+                            {% if user.is_dormant %}
+                                활성화로 변경
+                            {% else %}
+                                휴면으로 변경
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><a href="{{ url_for('home') }}">홈으로 돌아가기</a></p>
+</body>
+</html>

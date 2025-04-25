@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>상품 목록</h1>
+    
+    <!-- 상품 검색 폼 -->
+    <form method="GET" action="{{ url_for('products') }}">
+        <label for="search">상품 검색:</label>
+        <input type="text" id="search" name="search" placeholder="상품 이름을 입력하세요" value="{{ request.args.get('search', '') }}">
+        <button type="submit">검색</button>
+    </form>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <a href="{{ url_for('product_detail', id=product.id) }}">{{ product.title }}</a>
+                - {{ product.price }}원
+            </li>
+        {% else %}
+            <p>검색 결과가 없습니다.</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>

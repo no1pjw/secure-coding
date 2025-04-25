@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="{{ stylesheet }}">
+</head>
+<body>
+    <div class="container">
+        <h1>마이페이지</h1>
+        <form method="POST">
+            <label>소개글</label>
+            <textarea name="bio">{{ user.bio }}</textarea>
+            <label>비밀번호 변경</label>
+            <input type="password" name="password" required>
+            <button type="submit">업데이트</button>
+        </form>
+        <a href="{{ url_for('home') }}">홈으로</a>
+    </div>
+</body>
+</html>

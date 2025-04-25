@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>홈</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>중고거래 플랫폼에 오신 것을 환영합니다</h1>
+
+    {% if current_user.is_authenticated %}
+        <p>안녕하세요, {{ current_user.username }}님!</p>
+        <p>잔액: {{ current_user.balance }}원</p>  <!-- 잔액 표시 -->
+        <a href="{{ url_for('profile') }}">마이페이지</a> |
+        <a href="{{ url_for('logout') }}">로그아웃</a> |
+        <a href="{{ url_for('products') }}">상품 목록</a> |
+        <a href="{{ url_for('chat') }}">전체 채팅</a> |
+        <a href="{{ url_for('users') }}">유저 목록 보기</a> |
+        <a href="{{ url_for('send_money') }}">송금하기</a> | <!-- 송금하기 버튼 추가 -->
+        <a href="{{ url_for('transaction_history') }}">송금 내역</a> |<!-- 송금 내역 버튼 추가 -->
+        <a href="{{ url_for('add_product') }}">상품 추가</a> |
+        <a href="{{ url_for('manage_products') }}">내 상품 관리</a> 
+
+        {% if current_user.is_admin %}
+            <!-- 관리자 메뉴 추가 -->
+            <h3>관리자 기능</h3>
+            <a href="{{ url_for('manage_users') }}">유저 관리</a> |
+            <a href="{{ url_for('manage_all_products') }}">모든 상품 관리</a> |
+            <a href="{{ url_for('admin_reports') }}">신고 내역</a>
+        {% endif %}
+    {% else %}
+        <a href="{{ url_for('login') }}">로그인</a> |
+        <a href="{{ url_for('register') }}">회원가입</a>
+    {% endif %}
+</body>
+</html>

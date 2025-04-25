@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 관리</title>
+</head>
+<body>
+    <h1>상품 목록</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>상품 이름</th>
+                <th>가격</th>
+                <th>상태</th>
+                <th>상태 변경</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.title }}</td>
+                    <td>{{ product.price }}원</td>
+                    <td>
+                        {% if product.reported %}
+                            차단됨
+                        {% else %}
+                            활성
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('toggle_product_status', product_id=product.id) }}">
+                            {% if product.reported %}
+                                차단 해제
+                            {% else %}
+                                차단
+                            {% endif %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><a href="{{ url_for('home') }}">홈으로 돌아가기</a></p>
+</body>
+</html>

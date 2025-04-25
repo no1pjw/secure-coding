@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>신고된 상품 및 유저</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        // 신고된 내역이 없으면 팝업창을 띄움
+        {% if no_reports %}
+            window.onload = function() {
+                alert("신고된 내역이 없습니다.");
+            }
+        {% endif %}
+    </script>
+</head>
+<body>
+    <h1>신고된 상품 및 유저 목록</h1>
+
+    <h2>신고된 상품</h2>
+    <ul>
+        {% for report, product in reports_with_products %}
+            <li>
+                <strong>{{ product.title }}</strong> - {{ product.description }}
+                <p>가격: {{ product.price }}원</p>
+                <p>신고 사유: {{ report.reason }}</p>
+                <!-- 삭제 버튼 -->
+                <form action="{{ url_for('admin_reports') }}" method="POST">
+                    <input type="hidden" name="report_id" value="{{ report.id }}">
+                    <button type="submit">삭제</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h2>신고된 유저</h2>
+    <ul>
+        {% for report, user in reports_with_users %}
+            <li>
+                <strong>{{ user.username }}</strong>
+                <p>신고 사유: {{ report.reason }}</p>
+                <!-- 삭제 버튼 -->
+                <form action="{{ url_for('admin_reports') }}" method="POST">
+                    <input type="hidden" name="report_id" value="{{ report.id }}">
+                    <button type="submit">삭제</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ url_for('home') }}">홈으로 돌아가기</a></p>
+</body>
+</html>

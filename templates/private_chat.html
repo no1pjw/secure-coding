@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Chat with {{ other_user.username }}</h1>
+    <div id="messages">
+        {% for message in messages %}
+            <div class="message">
+                <strong>{{ message.sender.username }}:</strong> {{ message.content }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="messageForm">
+        <input type="text" id="messageInput" placeholder="Type a message" required>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        var sender = {{ current_user.id }};
+        var receiver = {{ other_user.id }};
+        var room = 'room_' + Math.min(sender, receiver) + '_' + Math.max(sender, receiver);
+
+        socket.emit('join_private', {user1: sender, user2: receiver});
+
+        $('#messageForm').submit(function(e) {
+            e.preventDefault();
+
+            var content = $('#messageInput').val();
+            if (content) {
+                // Emit message to the server
+                socket.emit('private_message', {
+                    sender: sender,
+                    receiver: receiver,
+                    content: content,
+                    sender_username: '{{ current_user.username }}'
+                });
+
+                // Display the message locally
+          
+                $('#messageInput').val('');
+            }
+        });
+
+        socket.on('private_message', function(data) {
+            $('#messages').append('<div class="message"><strong>' + data.sender_username + ':</strong> ' + data.content + '</div>');
+        });
+    </script>
+</body>
+</html>
